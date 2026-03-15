@@ -1,30 +1,14 @@
 // gradle/internal.gradle
 
-tasks.register('modPathDaemon') {
-    description = 'Listens for mod path broadcasts. Type q + Enter to stop.'
+tasks.register('modPathListener') {
+    description = 'Listens for mod path broadcasts.'
     group = 'development'
 
     doLast {
         def port = 25566
         def running = true
 
-        println "\n[Daemon] Listening on ${port}. Type 'q' + Enter to stop."
-
-        Thread.start {
-            def reader = new BufferedReader(new InputStreamReader(System.in))
-            while (running) {
-                try {
-                    if (reader.ready()) {
-                        def input = reader.readLine()?.trim()
-                        if (input == 'q') {
-                            println "[Daemon] Shutting down."
-                            running = false
-                        }
-                    }
-                    sleep(100)
-                } catch (Exception ignored) {}
-            }
-        }
+        println "Listening on ${port}."
 
         def serverSocket = new ServerSocket(port)
         serverSocket.setSoTimeout(1000)
@@ -37,8 +21,11 @@ tasks.register('modPathDaemon') {
 
                 if (input) {
                     def propsFile = file('dynamic-mods.properties')
-                    propsFile.text = "modsPath=${input.replace('\\', '/')}"
+                    def sanitizedInput = input.replace('\\', '/')
+                    propsFile.text = "modsPath=${sanitizedInput}"
+                    println "Received mod path: ${sanitizedInput}"
                     socket.outputStream.write(0)
+                    running = false
                 }
                 socket.close()
             } catch (SocketTimeoutException ignored) {
