@@ -38,6 +38,12 @@ tasks.register('modPathListener') {
 tasks.register('refreshDynamicMods') {
     group = 'development'
     doLast {
+        project.configurations.configureEach {
+            it.resolutionStrategy.cacheDynamicVersionsFor(0, 'seconds')
+            it.resolutionStrategy.cacheChangingModulesFor(0, 'seconds')
+        }
+    }
+    doFirst {
         def propsFile = file('dynamic-mods.properties')
         if (!propsFile.exists()) {
             println "No dynamic-mods.properties found!"
