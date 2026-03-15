@@ -13,13 +13,13 @@ class ExampleBundle extends BundleEntrypoint {
 
     @Override
     void onLoad() {
-        //eventBus.register(ExampleGameEventHandler)
+        eventBus.register(ExampleGameEventHandler)
         bundleBus.register(ExampleBundleEventHandler)
     }
 
     @Override
     void onUnload() {
-        //eventBus.unregister(ExampleGameEventHandler)
+        eventBus.unregister(ExampleGameEventHandler)
         bundleBus.unregister(ExampleBundleEventHandler)
     }
 }
