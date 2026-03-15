@@ -5,7 +5,7 @@ tasks.register('modPathListener') {
     group = 'development'
 
     doLast {
-        def port = 25566
+        def port = 56656
         def running = true
 
         println "Listening on ${port}."
