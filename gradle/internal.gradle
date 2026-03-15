@@ -82,3 +82,41 @@ tasks.register('clearModsPath') {
         if (file('dynamic-mods.properties').delete()) println "Configuration cleared."
     }
 }
+
+tasks.register('buildBundle') {
+    group = 'build'
+    description = 'Bundle equivalent to jar'
+
+    doLast {
+        def propsFile = file('gradle.properties')
+        if (!propsFile.exists()) {
+            throw new GradleException("gradle.properties not found!")
+        }
+        def props = new Properties()
+        propsFile.withInputStream { props.load(it) }
+
+        def bundleId = props.getProperty('bundleId')
+        def version = props.getProperty('version')
+
+        if (!bundleId || !version) {
+            throw new GradleException("bundleId and version must be defined in gradle.properties")
+        }
+
+        def targetDir = file("build/bundles/${bundleId}-${version}")
+
+        if (targetDir.exists()) targetDir.deleteDir()
+        targetDir.mkdirs()
+
+        copy {
+            from 'src/main/groovy'
+            into "${targetDir}"
+        }
+
+        copy {
+            from 'src/main/resources'
+            into targetDir
+        }
+
+        println "Bundle created at: ${targetDir.absolutePath}"
+    }
+}
