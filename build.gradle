@@ -1,0 +1,51 @@
+plugins {
+    id 'groovy'
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.140'
+}
+
+// Apply the internal helper tasks
+apply from: 'gradle/internal.gradle'
+
+group = 'io.github.luckymcdev.fetest'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = '21.11.38-beta'
+    parchment {
+        mappingsVersion = '2025.12.20'
+        minecraftVersion = '1.21.11'
+    }
+}
+
+dependencies {
+    implementation "org.apache.groovy:groovy:5.0.4"
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    def propsFile = file('dynamic-mods.properties')
+    if (propsFile.exists()) {
+        def props = new Properties()
+        propsFile.withInputStream { props.load(it) }
+        def modsPath = props.getProperty('modsPath')
+        if (modsPath) {
+            def modsDir = file(modsPath)
+            if (modsDir.exists() && modsDir.isDirectory()) {
+                fileTree(modsDir).include('**/*.jar').each { jarFile ->
+                    implementation files(jarFile)
+                }
+            }
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

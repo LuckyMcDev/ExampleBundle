@@ -1,0 +1,79 @@
+// gradle/internal.gradle
+
+tasks.register('modPathDaemon') {
+    description = 'Listens for mod path broadcasts and saves them to dynamic-mods.properties'
+    group = 'development'
+
+    doLast {
+        def port = 25566
+        def running = true
+        Runtime.runtime.addShutdownHook(new Thread({ running = false } as Runnable))
+
+        println "\n[Daemon] Starting on port ${port}..."
+        while (running) {
+            try (ServerSocket serverSocket = new ServerSocket(port)) {
+                serverSocket.setSoTimeout(1000)
+                while (running) {
+                    try {
+                        def socket = serverSocket.accept()
+                        Thread.start {
+                            try {
+                                def reader = new BufferedReader(new InputStreamReader(socket.inputStream))
+                                def modPath = reader.readLine()
+                                if (modPath) {
+                                    def propsFile = file('dynamic-mods.properties')
+                                    propsFile.text = """# Auto-generated
+modsPath=${modPath.replace('\\', '/')}
+timestamp=${System.currentTimeMillis()}
+"""
+                                    socket.outputStream.write(0)
+                                    println "\n[Daemon] Saved path: ${modPath}"
+                                }
+                            } finally {
+                                socket.close()
+                            }
+                        }
+                    } catch (SocketTimeoutException ignored) {}
+                }
+            } catch (BindException ignored) {
+                println "Port ${port} in use, retrying in 5s..."
+                Thread.sleep(5000)
+            }
+        }
+    }
+}
+
+tasks.register('refreshDynamicMods') {
+    group = 'development'
+    doLast {
+        def propsFile = file('dynamic-mods.properties')
+        if (!propsFile.exists()) {
+            println "No dynamic-mods.properties found!"
+            return
+        }
+        def props = new Properties()
+        propsFile.withInputStream { props.load(it) }
+        println "Loaded mods from: ${props.getProperty('modsPath')}"
+    }
+}
+
+tasks.register('showModsPath') {
+    group = 'help'
+    doLast {
+        def propsFile = file('dynamic-mods.properties')
+        if (propsFile.exists()) {
+            def props = new Properties()
+            propsFile.withInputStream { props.load(it) }
+            println "Current path: ${props.getProperty('modsPath')}"
+        } else {
+            println "No configuration found."
+        }
+    }
+}
+
+tasks.register('clearModsPath') {
+    group = 'development'
+    doLast {
+        if (file('dynamic-mods.properties').delete()) println "Configuration cleared."
+    }
+}

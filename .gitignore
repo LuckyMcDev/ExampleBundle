@@ -1,0 +1,48 @@
+# IDE & System
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+.profileconfig.json
+
+# Gradle & Java
+.gradle/
+build/
+**/build/
+.gradletasknamecache
+gradle-app.setting
+!gradle-wrapper.jar
+*.class
+*.log
+hs_err_pid*
+
+# Minecraft Modding Specific
+/run/
+/repo/
+
+# FoundryEngine specific
+dynamic-mods.properties
+
+# Temporary & OS Junk
+*~
+*.stackdump
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+._*
+*.rdc
+
+# Compiled Artifacts
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+/.idea/
