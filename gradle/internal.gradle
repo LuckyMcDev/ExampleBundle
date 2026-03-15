@@ -1,45 +1,50 @@
 // gradle/internal.gradle
 
 tasks.register('modPathDaemon') {
-    description = 'Listens for mod path broadcasts and saves them to dynamic-mods.properties'
+    description = 'Listens for mod path broadcasts. Type q + Enter to stop.'
     group = 'development'
 
     doLast {
         def port = 25566
         def running = true
-        Runtime.runtime.addShutdownHook(new Thread({ running = false } as Runnable))
 
-        println "\n[Daemon] Starting on port ${port}..."
-        while (running) {
-            try (ServerSocket serverSocket = new ServerSocket(port)) {
-                serverSocket.setSoTimeout(1000)
-                while (running) {
-                    try {
-                        def socket = serverSocket.accept()
-                        Thread.start {
-                            try {
-                                def reader = new BufferedReader(new InputStreamReader(socket.inputStream))
-                                def modPath = reader.readLine()
-                                if (modPath) {
-                                    def propsFile = file('dynamic-mods.properties')
-                                    propsFile.text = """# Auto-generated
-modsPath=${modPath.replace('\\', '/')}
-timestamp=${System.currentTimeMillis()}
-"""
-                                    socket.outputStream.write(0)
-                                    println "\n[Daemon] Saved path: ${modPath}"
-                                }
-                            } finally {
-                                socket.close()
-                            }
+        println "\n[Daemon] Listening on ${port}. Type 'q' + Enter to stop."
+
+        Thread.start {
+            def reader = new BufferedReader(new InputStreamReader(System.in))
+            while (running) {
+                try {
+                    if (reader.ready()) {
+                        def input = reader.readLine()?.trim()
+                        if (input == 'q') {
+                            println "[Daemon] Shutting down."
+                            running = false
                         }
-                    } catch (SocketTimeoutException ignored) {}
-                }
-            } catch (BindException ignored) {
-                println "Port ${port} in use, retrying in 5s..."
-                Thread.sleep(5000)
+                    }
+                    sleep(100)
+                } catch (Exception ignored) {}
             }
         }
+
+        def serverSocket = new ServerSocket(port)
+        serverSocket.setSoTimeout(1000)
+
+        while (running) {
+            try {
+                def socket = serverSocket.accept()
+                def reader = new BufferedReader(new InputStreamReader(socket.inputStream))
+                def input = reader.readLine()
+
+                if (input) {
+                    def propsFile = file('dynamic-mods.properties')
+                    propsFile.text = "modsPath=${input.replace('\\', '/')}"
+                    socket.outputStream.write(0)
+                }
+                socket.close()
+            } catch (SocketTimeoutException ignored) {
+            }
+        }
+        serverSocket.close()
     }
 }
 

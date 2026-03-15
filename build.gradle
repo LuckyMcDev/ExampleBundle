@@ -39,7 +39,7 @@ dependencies {
             def modsDir = file(modsPath)
             if (modsDir.exists() && modsDir.isDirectory()) {
                 fileTree(modsDir).include('**/*.jar').each { jarFile ->
-                    implementation files(jarFile)
+                    dependencies.add("implementation", files(jarFile))
                 }
             }
         }
