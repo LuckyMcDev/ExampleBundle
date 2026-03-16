@@ -113,3 +113,41 @@ tasks.register('buildBundle') {
         println "Bundle created at: ${targetDir.absolutePath}"
     }
 }
+
+tasks.register('deployBundle') {
+    group = 'build'
+    description = 'Deploys the bundle to run/FoundryEngine/bundles'
+    dependsOn 'buildBundle'
+
+    doLast {
+        def propsFile = file('gradle.properties')
+        if (!propsFile.exists()) {
+            throw new GradleException("gradle.properties not found!")
+        }
+        def props = new Properties()
+        propsFile.withInputStream { props.load(it) }
+
+        def bundleId = props.getProperty('bundleId')
+        def version = props.getProperty('version')
+
+        if (!bundleId || !version) {
+            throw new GradleException("bundleId and version must be defined in gradle.properties")
+        }
+
+        def sourceDir = file("build/bundles/${bundleId}-${version}")
+        def destDir = file("run/FoundryEngine/bundles")
+
+        if (destDir.exists()) {
+            println "Clearing bundles directory: ${destDir.absolutePath}"
+            destDir.deleteDir()
+        }
+        destDir.mkdirs()
+
+        copy {
+            from sourceDir
+            into "${destDir}/${bundleId}-${version}"
+        }
+
+        println "Bundle deployed to: ${destDir.absolutePath}/${bundleId}-${version}"
+    }
+}

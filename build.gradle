@@ -22,6 +22,27 @@ neoForge {
         mappingsVersion = '2025.12.20'
         minecraftVersion = '1.21.11'
     }
+    runs {
+        client {
+            client()
+            //dependsOn tasks.named('deployBundle')
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'terminal.ansi', 'true'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+}
+
+tasks.named('runClient') {
+    dependsOn tasks.named('deployBundle')
 }
 
 dependencies {
