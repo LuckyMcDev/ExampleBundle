@@ -11,7 +11,7 @@ import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.neoforge.registries.RegisterEvent
 
 class ExampleBundleEventHandler {
-    public static Freezable<Item> EXAMPLE_ITEM
+    public static Freezable<Item> EXAMPLE_ITEM = new Freezable<>()
 
     @SubscribeEvent
     static void onRegisterEvent(RegisterEvent event) {
