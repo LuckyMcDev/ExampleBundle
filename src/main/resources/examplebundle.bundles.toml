@@ -1,6 +1,6 @@
 [[bundles]]
 bundleId = "examplebundle"
-version = "0.0.2"
+version = "0.0.3"
 displayName = "Example Bundle"
 displayURL = "https://github.com/Example"
 authors = "Example"

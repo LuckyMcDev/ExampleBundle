@@ -16,9 +16,11 @@ class ExampleBundleEventHandler {
     @SubscribeEvent
     static void onRegisterEvent(RegisterEvent event) {
         event.register(Registries.ITEM, helper -> {
-            def item = new ItemBuilder(Identifier.fromNamespaceAndPath(ExampleBundle.BUNDLEID, "example_item"))
-                    .fireResistant()
+            def item = new ItemBuilder(ExampleBundle.id("example_item"))
                     .component(DataComponents.RARITY, Rarity.EPIC)
+                    .properties( p -> {
+                        p.fireResistant()
+                    })
 
             EXAMPLE_ITEM.setValue(item.register(helper))
             EXAMPLE_ITEM.freeze()

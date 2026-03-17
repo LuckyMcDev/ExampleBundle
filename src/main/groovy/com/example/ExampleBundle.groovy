@@ -1,6 +1,7 @@
 package com.example
 
 import io.github.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import net.minecraft.resources.Identifier
 import net.neoforged.bus.api.IEventBus
 
 
@@ -21,5 +22,9 @@ class ExampleBundle extends BundleEntrypoint {
     void onUnload() {
         eventBus.unregister(ExampleGameEventHandler)
         bundleBus.unregister(ExampleBundleEventHandler)
+    }
+
+    static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(BUNDLEID, path)
     }
 }

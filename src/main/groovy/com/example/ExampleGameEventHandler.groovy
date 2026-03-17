@@ -10,7 +10,7 @@ class ExampleGameEventHandler {
     static void onServerTickEvent(ServerTickEvent.Post event) {
         if (event.getServer().tickCount % 20 == 0) {
             event.getServer().getPlayerList().getPlayers().forEach { player ->
-                //player.sendSystemMessage(Component.literal("test"))
+                player.sendSystemMessage(Component.literal("test"))
             }
         }
     }
