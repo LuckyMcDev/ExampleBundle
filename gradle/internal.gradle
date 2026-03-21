@@ -1,5 +1,3 @@
-// gradle/internal.gradle
-
 tasks.register('modPathListener') {
     description = 'Listens for mod path broadcasts.'
     group = 'development'

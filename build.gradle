@@ -7,25 +7,20 @@ plugins {
 // Apply the internal helper tasks
 apply from: 'gradle/internal.gradle'
 
-group = 'io.github.luckymcdev.fetest'
-version = '1.0-SNAPSHOT'
+group = 'UNDEFINED'
+version = project.version
 
 repositories {
     mavenCentral()
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
-    version = '21.11.38-beta'
-    parchment {
-        mappingsVersion = '2025.12.20'
-        minecraftVersion = '1.21.11'
-    }
+    version = '26.1.0.0-alpha.15+pre-3'
     runs {
         client {
             client()
-            //dependsOn tasks.named('deployBundle')
         }
 
         server {
