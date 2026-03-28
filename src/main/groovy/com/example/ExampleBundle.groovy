@@ -1,6 +1,6 @@
 package com.example
 
-import io.github.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
 import net.minecraft.resources.Identifier
 import net.neoforged.bus.api.IEventBus
 
