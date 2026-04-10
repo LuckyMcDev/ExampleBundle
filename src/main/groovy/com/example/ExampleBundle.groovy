@@ -1,30 +1,34 @@
 package com.example
 
+import de.luckymcdev.foundryengine.api.event.BundleEvents
+import de.luckymcdev.foundryengine.api.event.ClientEvents
+import de.luckymcdev.foundryengine.common.bundle.config.BundleConfig
+import de.luckymcdev.foundryengine.common.bundle.config.BundleConfigSpec
 import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.neoforged.bus.api.IEventBus
 
-
 class ExampleBundle extends BundleEntrypoint {
-    static final String BUNDLEID = "examplebundle"
 
-    ExampleBundle(IEventBus bundleBus, IEventBus eventBus) {
-        super(bundleBus, eventBus)
+    ExampleBundle(IEventBus eventBus, BundleConfig bundleConfig) {
+        super(eventBus, bundleConfig)
     }
 
+
+    /**
+     * Method called when the bundle is loaded.
+     */
     @Override
     void onLoad() {
-        eventBus.register(ExampleGameEventHandler)
-        bundleBus.register(ExampleBundleEventHandler)
     }
 
+    /**
+     * Method called when the bundle is unloaded. You NEED to unregister any event handlers here.
+     */
     @Override
     void onUnload() {
-        eventBus.unregister(ExampleGameEventHandler)
-        bundleBus.unregister(ExampleBundleEventHandler)
     }
 
-    static Identifier id(String path) {
-        return Identifier.fromNamespaceAndPath(BUNDLEID, path)
-    }
 }
