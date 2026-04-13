@@ -51,12 +51,11 @@ dependencies {
         def props = new Properties()
         propsFile.withInputStream { props.load(it) }
         def modsPath = props.getProperty('modsPath')
+
         if (modsPath) {
             def modsDir = file(modsPath)
             if (modsDir.exists() && modsDir.isDirectory()) {
-                fileTree(modsDir).include('**/*.jar').each { jarFile ->
-                    dependencies.add("implementation", files(jarFile))
-                }
+                implementation files(fileTree(dir: modsDir, include: '**/*.jar'))
             }
         }
     }
