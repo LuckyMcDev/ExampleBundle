@@ -5,3 +5,4 @@ displayName = "Example Bundle"
 displayURL = "https://github.com/Example"
 authors = "Example"
 description = '''This is a Description'''
+dependencies = []

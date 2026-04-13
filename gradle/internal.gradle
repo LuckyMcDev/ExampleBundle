@@ -93,14 +93,15 @@ tasks.register('buildBundle') {
             throw new GradleException("bundleId and version must be defined in gradle.properties")
         }
 
-        def targetDir = file("build/bundles/${bundleId}-${version}")
+        def bundleFolderName = "${bundleId}-${version}"
+        def targetDir = file("build/bundles/${bundleFolderName}")
 
         if (targetDir.exists()) targetDir.deleteDir()
         targetDir.mkdirs()
 
         copy {
             from 'src/main/groovy'
-            into "${targetDir}"
+            into "${targetDir}/scripts"
         }
 
         copy {
@@ -119,33 +120,21 @@ tasks.register('deployBundle') {
 
     doLast {
         def propsFile = file('gradle.properties')
-        if (!propsFile.exists()) {
-            throw new GradleException("gradle.properties not found!")
-        }
         def props = new Properties()
         propsFile.withInputStream { props.load(it) }
 
         def bundleId = props.getProperty('bundleId')
         def version = props.getProperty('version')
+        def bundleFolderName = "${bundleId}-${version}"
 
-        if (!bundleId || !version) {
-            throw new GradleException("bundleId and version must be defined in gradle.properties")
-        }
-
-        def sourceDir = file("build/bundles/${bundleId}-${version}")
-        def destDir = file("run/FoundryEngine/bundles")
-
-        if (destDir.exists()) {
-            println "Clearing bundles directory: ${destDir.absolutePath}"
-            destDir.deleteDir()
-        }
-        destDir.mkdirs()
+        def sourceDir = file("build/bundles/${bundleFolderName}")
+        def destDir = file("run/FoundryEngine/bundles/${bundleFolderName}")
 
         copy {
             from sourceDir
-            into "${destDir}/${bundleId}-${version}"
+            into destDir
         }
 
-        println "Bundle deployed to: ${destDir.absolutePath}/${bundleId}-${version}"
+        println "Bundle deployed to: ${destDir.absolutePath}"
     }
 }
