@@ -1,11 +1,13 @@
-package server.minimal
+package server.testbundle
+
 
 import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
 
-class ExampleServer implements BundleEntrypoint {
+class ServerEntrypoint implements BundleEntrypoint {
 
     @Override
     void onLoad() {
+
     }
 
     @Override
