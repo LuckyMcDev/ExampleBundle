@@ -17,7 +17,7 @@ repositories {
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
-    version = '26.1.2.78'
+    version = '26.1.2.31-beta'
     runs {
         client {
             client()
@@ -44,9 +44,21 @@ dependencies {
     implementation "org.apache.groovy:groovy:5.0.4"
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    def propsFile = file('dynamic-mods.properties')
+    if (propsFile.exists()) {
+        def props = new Properties()
+        propsFile.withInputStream { props.load(it) }
+        def modsPath = props.getProperty('modsPath')
 
+        if (modsPath) {
+            def modsDir = file(modsPath)
+            if (modsDir.exists() && modsDir.isDirectory()) {
+                implementation files(fileTree(dir: modsDir, include: '**/*.jar'))
+            }
+        }
+    }
 }
 
 test {

@@ -1,0 +1,8 @@
+[[bundles]]
+bundleId = "examplebundle"
+version = "0.0.3"
+displayName = "Example Bundle"
+displayURL = "https://github.com/Example"
+authors = "Example"
+description = '''This is a Description'''
+dependencies = []
