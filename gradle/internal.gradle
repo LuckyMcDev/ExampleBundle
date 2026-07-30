@@ -1,66 +1,75 @@
+// Helper method to find and parse bundleId and version from *.bundles.toml
+def getBundleMetaData() {
+	def resourcesDir = file('src/main/resources')
+	def tomlFiles = resourcesDir.listFiles({ dir, name -> name.endsWith('.bundles.toml') } as FilenameFilter)
+
+	if (!tomlFiles || tomlFiles.length == 0) {
+		throw new GradleException("No *.bundles.toml file found in ${resourcesDir.absolutePath}")
+	}
+
+	def tomlFile = tomlFiles[0]
+	def text = tomlFile.text
+
+	// Extract bundleId and version using Regex
+	def bundleIdMatcher = text =~ /(?m)^\s*bundleId\s*=\s*["']?([^"'\r\n]+)["']?/
+	def versionMatcher = text =~ /(?m)^\s*version\s*=\s*["']?([^"'\r\n]+)["']?/
+
+	if (!bundleIdMatcher.find() || !versionMatcher.find()) {
+		throw new GradleException("Could not find 'bundleId' or 'version' in ${tomlFile.name}")
+	}
+
+	return [
+			bundleId: bundleIdMatcher[0][1].trim(),
+			version : versionMatcher[0][1].trim()
+	]
+}
+
 tasks.register('buildBundle') {
-    group = 'build'
-    description = 'Bundle equivalent to jar'
+	group = 'build'
+	description = 'Bundle equivalent to jar'
 
-    doLast {
-        def propsFile = file('gradle.properties')
-        if (!propsFile.exists()) {
-            throw new GradleException("gradle.properties not found!")
-        }
-        def props = new Properties()
-        propsFile.withInputStream { props.load(it) }
+	doLast {
+		def metaData = getBundleMetaData()
+		def bundleFolderName = "${metaData.bundleId}-${metaData.version}"
+		def targetDir = file("build/bundles/${bundleFolderName}")
 
-        def bundleId = props.getProperty('bundleId')
-        def version = props.getProperty('version')
+		if (targetDir.exists()) targetDir.deleteDir()
+		targetDir.mkdirs()
 
-        if (!bundleId || !version) {
-            throw new GradleException("bundleId and version must be defined in gradle.properties")
-        }
+		copy {
+			from 'src/main/groovy'
+			into "${targetDir}/scripts"
+		}
 
-        def bundleFolderName = "${bundleId}-${version}"
-        def targetDir = file("build/bundles/${bundleFolderName}")
+		copy {
+			from 'src/main/resources'
+			into targetDir
+		}
 
-        if (targetDir.exists()) targetDir.deleteDir()
-        targetDir.mkdirs()
-
-        copy {
-            from 'src/main/groovy'
-            into "${targetDir}/scripts"
-        }
-
-        copy {
-            from 'src/main/resources'
-            into targetDir
-        }
-
-        println "Bundle created at: ${targetDir.absolutePath}"
-    }
+		println "Bundle created at: ${targetDir.absolutePath}"
+	}
 }
 
 tasks.register('deployBundle') {
-    group = 'build'
-    description = 'Deploys the bundle to runs/*/FoundryEngine/bundles'
-    dependsOn 'buildBundle'
+	group = 'build'
+	description = 'Deploys the bundle to runs/*/FoundryEngine/bundles'
+	dependsOn 'buildBundle'
 
-    doLast {
-        def propsFile = file('gradle.properties')
-        def props = new Properties()
-        propsFile.withInputStream { props.load(it) }
+	doLast {
+		def metaData = getBundleMetaData()
+		def bundleFolderName = "${metaData.bundleId}-${metaData.version}"
 
-        def bundleId = props.getProperty('bundleId')
-        def version = props.getProperty('version')
-        def bundleFolderName = "${bundleId}-${version}"
+		def sourceDir = file("build/bundles/${bundleFolderName}")
+		def runDirs = ['../runs/client', '../runs/server', '../runs/gameTestServer']
 
-        def sourceDir = file("build/bundles/${bundleFolderName}")
-        def runDirs = ['../runs/client', '../runs/server', '../runs/gameTestServer']
+		runDirs.each { runDir ->
+			def destDir = file("${runDir}/FoundryEngine/bundles/${bundleFolderName}")
+			copy {
+				from sourceDir
+				into destDir
+			}
 
-        runDirs.each { runDir ->
-            def destDir = file("${runDir}/FoundryEngine/bundles/${bundleFolderName}")
-            copy {
-                from sourceDir
-                into destDir
-            }
-            println "Bundle deployed to: ${destDir.absolutePath}"
-        }
-    }
+			println "Bundle deployed to: ${destDir.absolutePath}"
+		}
+	}
 }
