@@ -1,5 +1,4 @@
-// Helper method to find and parse bundleId and version from *.bundles.toml
-def getBundleMetaData() {
+ext.getBundleMetaData = {
 	def resourcesDir = file('src/main/resources')
 	def tomlFiles = resourcesDir.listFiles({ dir, name -> name.endsWith('.bundles.toml') } as FilenameFilter)
 
@@ -10,13 +9,15 @@ def getBundleMetaData() {
 	def tomlFile = tomlFiles[0]
 	def text = tomlFile.text
 
-	// Extract bundleId and version using Regex
 	def bundleIdMatcher = text =~ /(?m)^\s*bundleId\s*=\s*["']?([^"'\r\n]+)["']?/
 	def versionMatcher = text =~ /(?m)^\s*version\s*=\s*["']?([^"'\r\n]+)["']?/
 
 	if (!bundleIdMatcher.find() || !versionMatcher.find()) {
 		throw new GradleException("Could not find 'bundleId' or 'version' in ${tomlFile.name}")
 	}
+
+	println("Bundle ID: ${bundleIdMatcher[0][1].trim()}")
+	println("Version: ${versionMatcher[0][1].trim()}")
 
 	return [
 			bundleId: bundleIdMatcher[0][1].trim(),
@@ -28,25 +29,24 @@ tasks.register('buildBundle') {
 	group = 'build'
 	description = 'Bundle equivalent to jar'
 
+	def metaData = project.getBundleMetaData()
+	def bundleFolderName = "${metaData.bundleId}-${metaData.version}"
+	def targetDir = file("build/bundles/${bundleFolderName}").absolutePath
+
 	doLast {
-		def metaData = getBundleMetaData()
-		def bundleFolderName = "${metaData.bundleId}-${metaData.version}"
-		def targetDir = file("build/bundles/${bundleFolderName}")
+		def targetFile = new File(targetDir)
+		if (targetFile.exists()) targetFile.deleteDir()
+		targetFile.mkdirs()
 
-		if (targetDir.exists()) targetDir.deleteDir()
-		targetDir.mkdirs()
-
-		copy {
-			from 'src/main/groovy'
-			into "${targetDir}/scripts"
+		ant.copy(todir: "${targetDir}/scripts") {
+			fileset(dir: 'src/main/groovy')
 		}
 
-		copy {
-			from 'src/main/resources'
-			into targetDir
+		ant.copy(todir: targetDir) {
+			fileset(dir: 'src/main/resources')
 		}
 
-		println "Bundle created at: ${targetDir.absolutePath}"
+		println "Bundle created at: ${targetDir}"
 	}
 }
 
@@ -55,21 +55,20 @@ tasks.register('deployBundle') {
 	description = 'Deploys the bundle to runs/*/FoundryEngine/bundles'
 	dependsOn 'buildBundle'
 
+	def metaData = project.getBundleMetaData()
+	def bundleFolderName = "${metaData.bundleId}-${metaData.version}"
+	def sourceDir = file("build/bundles/${bundleFolderName}").absolutePath
+	def runDirs = ['../runs/client', '../runs/server', '../runs/gameTestServer']
+	def destDirs = runDirs.collect { runDir ->
+		file("${runDir}/FoundryEngine/bundles/${bundleFolderName}").absolutePath
+	}
+
 	doLast {
-		def metaData = getBundleMetaData()
-		def bundleFolderName = "${metaData.bundleId}-${metaData.version}"
-
-		def sourceDir = file("build/bundles/${bundleFolderName}")
-		def runDirs = ['../runs/client', '../runs/server', '../runs/gameTestServer']
-
-		runDirs.each { runDir ->
-			def destDir = file("${runDir}/FoundryEngine/bundles/${bundleFolderName}")
-			copy {
-				from sourceDir
-				into destDir
+		destDirs.each { destDir ->
+			ant.copy(todir: destDir) {
+				fileset(dir: sourceDir)
 			}
-
-			println "Bundle deployed to: ${destDir.absolutePath}"
+			println "Bundle deployed to: ${destDir}"
 		}
 	}
 }
