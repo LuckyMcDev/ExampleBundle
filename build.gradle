@@ -38,7 +38,7 @@ repositories {
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
-    version = '26.1.2.78'
+	version = '26.1.2.93'
     runs {
         client {
             client()
