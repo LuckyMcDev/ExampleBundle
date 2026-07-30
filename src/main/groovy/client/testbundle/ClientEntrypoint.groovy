@@ -7,23 +7,23 @@ import net.minecraft.client.Minecraft
 
 class ClientEntrypoint implements BundleEntrypoint {
 
-    @Override
-    void onLoad() {
-        ClientEvents.tick {
-            def player = Minecraft.getInstance().player
-            if (player != null) {
-                if (player.tickCount % 20 == 0) {
-                    //player.sendSystemMessage(Component.literal("Test + " + player.tickCount))
-                }
-            }
-        }
+	@Override
+	void onLoad() {
+		ClientEvents.tick {
+			def player = Minecraft.getInstance().player
+			if (player != null) {
+				if (player.tickCount % 20 == 0) {
+					//player.sendSystemMessage(Component.literal("Test + " + player.tickCount))
+				}
+			}
+		}
 
-        ClientEvents.renderGui {
-            //it.guiGraphics.fakeItem(new ItemStack(CommonEntrypoint.THIS_IS_A_ITEM.get()), 100, 200)
-        }
-    }
+		ClientEvents.renderGui {
+			//it.guiGraphics.fakeItem(new ItemStack(CommonEntrypoint.THIS_IS_A_ITEM.get()), 100, 200)
+		}
+	}
 
-    @Override
-    void onUnload() {
-    }
+	@Override
+	void onUnload() {
+	}
 }
