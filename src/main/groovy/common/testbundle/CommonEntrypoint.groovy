@@ -141,6 +141,8 @@ class CommonEntrypoint implements BundleEntrypoint {
 			it.tags(MY_TAG)
 		}
 
+		Utils.hello("World")
+
 	}
 
 	@Override
