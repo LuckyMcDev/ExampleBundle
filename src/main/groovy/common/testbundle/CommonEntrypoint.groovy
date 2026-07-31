@@ -11,6 +11,7 @@ import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
 import net.minecraft.advancements.criterion.InventoryChangeTrigger
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.tags.BlockTags
@@ -61,6 +62,9 @@ class CommonEntrypoint implements BundleEntrypoint {
 	private static final BlockBuilder MY_BLOCK = BlockBuilder.create(id("my_block"))
 			.properties(p -> p.strength(2.0f, 3.0f))
 			.itemProperties(p -> p.rarity(Rarity.COMMON))
+			.use {
+				println("test")
+			}
 
 	private static final BlockBuilder GHOST_BLOCK = BlockBuilder.create(id("ghost_block"))
 			.properties(p -> p.strength(-1.0f, 3600000.0f).noCollision())
@@ -71,7 +75,7 @@ class CommonEntrypoint implements BundleEntrypoint {
 			.pattern(" D ", " D ", " S ")
 			.define('D' as char, Items.DIAMOND)
 			.define('S' as char, Items.STICK)
-			.category(net.minecraft.data.recipes.RecipeCategory.COMBAT)
+			.category(RecipeCategory.COMBAT)
 			.unlockedBy("has_diamond", InventoryChangeTrigger.TriggerInstance.hasItems(Items.DIAMOND))
 			.count(10)
 
