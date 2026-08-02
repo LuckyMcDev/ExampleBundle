@@ -1,7 +1,7 @@
 plugins {
     id 'groovy'
     id 'java-library'
-    id 'net.neoforged.moddev' version '2.0.140'
+	id 'net.neoforged.moddev'
 }
 
 // Apply the internal helper tasks
@@ -38,7 +38,7 @@ repositories {
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
-	version = '26.1.2.93'
+	version = neo_version
     runs {
         client {
             client()
@@ -67,9 +67,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	implementation(project(':')) {
-		transitive = false
-	}
+	implementation(project(':'))
 }
 
 test {
