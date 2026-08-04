@@ -1,4 +1,4 @@
-package common.testbundle
+package client.testbundle
 
 import de.luckymcdev.foundryengine.client.render.blockentity.EngineBlockEntityRenderers
 import de.luckymcdev.foundryengine.common.builder.block.BlockBuilder
