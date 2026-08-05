@@ -1,6 +1,6 @@
-package client.testbundle
+package common.testbundle
 
-import de.luckymcdev.foundryengine.client.render.blockentity.EngineBlockEntityRenderers
+
 import de.luckymcdev.foundryengine.common.builder.block.BlockBuilder
 import de.luckymcdev.foundryengine.common.builder.blockentity.BlockEntityBuilder
 import de.luckymcdev.foundryengine.common.event.BundleEvents
@@ -17,7 +17,7 @@ class BlockEntityDemo implements BundleEntrypoint {
 		return Identifier.fromNamespaceAndPath(BUNDLEID, path)
 	}
 
-	private static final BlockEntityBuilder<?> COUNTER_BE = BlockEntityBuilder.create(id("counter"))
+	public static final BlockEntityBuilder<?> COUNTER_BE = BlockEntityBuilder.create(id("counter"))
 			.tick { level, pos, state, be ->
 				// read stored value, tick logic
 				println "Counter BE ticking at $pos"
@@ -28,9 +28,8 @@ class BlockEntityDemo implements BundleEntrypoint {
 			.onSave { output ->
 				println "Counter BE saved"
 			}
-			.renderer(EngineBlockEntityRenderers.noop())
 
-	private static final BlockBuilder COUNTER_BLOCK = BlockBuilder.create(id("counter_block"))
+	public static final BlockBuilder COUNTER_BLOCK = BlockBuilder.create(id("counter_block"))
 			.properties { p -> p.strength(2.0f, 3.0f) }
 			.blockEntity(COUNTER_BE)
 			.use { state, level, pos, player, hitResult ->

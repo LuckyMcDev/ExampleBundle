@@ -65,6 +65,7 @@ tasks.register('deployBundle') {
 
 	doLast {
 		destDirs.each { destDir ->
+			ant.delete(dir: destDir)
 			ant.copy(todir: destDir) {
 				fileset(dir: sourceDir)
 			}
