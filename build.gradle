@@ -38,7 +38,7 @@ repositories {
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
-	version = neo_version
+	version = libs.versions.neo.version
 }
 
 dependencies {
