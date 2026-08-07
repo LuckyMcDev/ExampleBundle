@@ -1,0 +1,20 @@
+plugins {
+    id 'java-gradle-plugin'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.electronwill.night-config:toml:3.8.1'
+}
+
+gradlePlugin {
+    plugins {
+        foundryBundle {
+            id = 'foundry-bundle'
+            implementationClass = 'de.luckymcdev.foundryengine.buildsrc.FoundryBundlePlugin'
+        }
+    }
+}

@@ -6,6 +6,7 @@ class ExampleServer implements BundleEntrypoint {
 
     @Override
     void onLoad() {
+    
     }
 
     @Override

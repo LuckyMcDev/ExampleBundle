@@ -6,6 +6,7 @@ class ExampleCommon implements BundleEntrypoint {
 
     @Override
     void onLoad() {
+    
     }
 
     @Override
