@@ -33,6 +33,10 @@ repositories {
 		name = "ModMaven"
 		url = "https://modmaven.dev"
 	}
+	maven() {
+		name = "RyanHCode Maven"
+		url = "https://maven.ryanhcode.dev/releases"
+	}
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
