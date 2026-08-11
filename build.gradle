@@ -13,8 +13,14 @@ repositories {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
+foundryDeploy {
+    bundlesDir = "run/FoundryEngine/bundles"
+}
+
+var neoforgeVersion = '26.1.2.93'
+
 neoForge {
-    version = '26.1.2.31-beta'
+    version = neoforgeVersion
     runs {
         client {
             client()

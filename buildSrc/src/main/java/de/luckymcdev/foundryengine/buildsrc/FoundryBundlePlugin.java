@@ -29,6 +29,8 @@ public class FoundryBundlePlugin implements Plugin<Project> {
         project.setVersion(metadata.version());
         project.getExtensions().add("foundryBundle", metadata);
 
+        project.getExtensions().create("foundryDeploy", FoundryDeployExtension.class);
+
         registerDynamicModsDependency(project);
         registerBundleTasks(project, metadata);
         registerUtilityTasks(project);
@@ -127,10 +129,23 @@ public class FoundryBundlePlugin implements Plugin<Project> {
 
         project.getTasks().register("deployBundle", Copy.class, task -> {
             task.setGroup("build");
-            task.setDescription("Deploys the bundle to run/FoundryEngine/bundles");
+            task.setDescription("Deploys the bundle to the configured bundles directory");
 
             task.from(buildBundle);
-            task.into(project.file("run/FoundryEngine/bundles/" + metadata.folderName()));
+
+            task.into(project.provider(() -> {
+                FoundryDeployExtension ext = project.getExtensions().getByType(FoundryDeployExtension.class);
+                return project.file(ext.getBundlesDir() + "/" + metadata.folderName());
+            }));
+
+            task.doFirst(t -> {
+                FoundryDeployExtension ext = project.getExtensions().getByType(FoundryDeployExtension.class);
+                File deployDir = project.file(ext.getBundlesDir() + "/" + metadata.folderName());
+                if (deployDir.exists()) {
+                    project.delete(deployDir);
+                    task.getLogger().lifecycle("Deleted old bundle at {}", deployDir);
+                }
+            });
         });
     }
 
