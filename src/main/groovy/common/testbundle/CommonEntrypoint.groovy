@@ -7,6 +7,7 @@ import de.luckymcdev.foundryengine.common.builder.recipe.RecipeBuilder
 import de.luckymcdev.foundryengine.common.builder.sound.SoundBuilder
 import de.luckymcdev.foundryengine.common.builder.tag.TagBuilder
 import de.luckymcdev.foundryengine.common.event.BundleEvents
+import de.luckymcdev.foundryengine.common.event.PlayerEvents
 import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
 import net.minecraft.advancements.criterion.InventoryChangeTrigger
 import net.minecraft.core.component.DataComponents
@@ -143,6 +144,12 @@ class CommonEntrypoint implements BundleEntrypoint {
 
 		Utils.hello("World")
 
+		/*
+		PlayerEvents.tick {
+			def nullObj = null
+			nullObj.triggerError()
+		}
+		 */
 	}
 
 	@Override
