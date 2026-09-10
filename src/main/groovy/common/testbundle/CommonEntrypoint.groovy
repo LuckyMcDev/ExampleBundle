@@ -4,7 +4,6 @@ import de.luckymcdev.foundryengine.common.Common
 import de.luckymcdev.foundryengine.common.builder.block.BlockBuilder
 import de.luckymcdev.foundryengine.common.builder.item.ItemBuilder
 import de.luckymcdev.foundryengine.common.builder.menu.MenuBuilder
-import de.luckymcdev.foundryengine.common.builder.menu.SimpleMenu
 import de.luckymcdev.foundryengine.common.builder.recipe.RecipeBuilder
 import de.luckymcdev.foundryengine.common.builder.sound.SoundBuilder
 import de.luckymcdev.foundryengine.common.builder.tag.TagBuilder
@@ -47,9 +46,6 @@ class CommonEntrypoint implements BundleEntrypoint {
 			)))
 			.component(DataComponents.RARITY, Rarity.UNCOMMON)
 			.stacksTo(3)
-
-	public static final MenuBuilder<SimpleMenu> CHEST_3 =
-			MenuBuilder.chestMenu(id("chest_3"), 3)
 
 	private static final ItemBuilder COSMIC_APPLE = ItemBuilder.create(id("cosmic_apple"))
 			.component(DataComponents.LORE, new ItemLore(List.of(
@@ -145,7 +141,6 @@ class CommonEntrypoint implements BundleEntrypoint {
 					SMOKING_RECIPE, CAMPFIRE_RECIPE, STONECUTTING_RECIPE, SMITHING_TRANSFORM_RECIPE)
 			it.sounds(MY_SOUND)
 			it.tags(MY_TAG)
-			it.menus(CHEST_3)
 		}
 
 		Utils.hello("World")
