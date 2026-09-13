@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.world.InteractionResult
 
-class BlockEntityDemo implements BundleEntrypoint {
+class BlockEntityDemoEntrypoint implements BundleEntrypoint {
 
 	static final String BUNDLEID = "testbundle"
 

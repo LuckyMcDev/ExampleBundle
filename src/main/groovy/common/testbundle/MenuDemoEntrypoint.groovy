@@ -7,13 +7,12 @@ import de.luckymcdev.foundryengine.common.builder.menu.EngineMenu
 import de.luckymcdev.foundryengine.common.builder.menu.MenuBuilder
 import de.luckymcdev.foundryengine.common.event.BundleEvents
 import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.InteractionResult
 
-class MenuDemo implements BundleEntrypoint {
+class MenuDemoEntrypoint implements BundleEntrypoint {
 
 	static final String BUNDLEID = "testbundle"
 

@@ -1,7 +1,8 @@
 package client.testbundle
 
-import common.testbundle.BlockEntityDemo
+import common.testbundle.BlockEntityDemoEntrypoint
 import de.luckymcdev.foundryengine.client.render.blockentity.EngineBlockEntityRenderers
+import de.luckymcdev.foundryengine.common.Common
 import de.luckymcdev.foundryengine.common.event.BundleEvents
 import de.luckymcdev.foundryengine.common.event.ClientEvents
 import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
@@ -25,8 +26,10 @@ class ClientEntrypoint implements BundleEntrypoint {
 		}
 
 		BundleEvents.registry {
-			BlockEntityDemo.COUNTER_BE.renderer(EngineBlockEntityRenderers.noop())
+			BlockEntityDemoEntrypoint.COUNTER_BE.renderer(EngineBlockEntityRenderers.noop())
 		}
+
+		Common.LOGGER.error("Test Load Server")
 	}
 
 	@Override

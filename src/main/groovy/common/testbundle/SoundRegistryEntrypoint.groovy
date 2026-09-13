@@ -4,7 +4,7 @@ import de.luckymcdev.foundryengine.common.builder.sound.SoundBuilder
 import de.luckymcdev.foundryengine.common.event.BundleEvents
 import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
 
-class SoundRegistry implements BundleEntrypoint {
+class SoundRegistryEntrypoint implements BundleEntrypoint {
 	static def TEST_FORMATS = ["flac", "mp3", "ogg"]
 
 	static def TEST_SONGS = TEST_FORMATS.collect { format ->

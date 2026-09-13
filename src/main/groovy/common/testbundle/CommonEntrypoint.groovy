@@ -145,6 +145,8 @@ class CommonEntrypoint implements BundleEntrypoint {
 
 		Utils.hello("World")
 
+		Common.LOGGER.error("Test Load Server")
+
 		/*
 		PlayerEvents.tick {
 			def nullObj = null
