@@ -135,18 +135,26 @@ public class FoundryBundlePlugin implements Plugin<Project> {
 
             task.into(project.provider(() -> {
                 FoundryDeployExtension ext = project.getExtensions().getByType(FoundryDeployExtension.class);
-                return project.file(ext.getBundlesDir() + "/" + metadata.folderName());
+                return resolveBundleDir(project, ext.getBundlesDir(), metadata.folderName());
             }));
 
             task.doFirst(t -> {
                 FoundryDeployExtension ext = project.getExtensions().getByType(FoundryDeployExtension.class);
-                File deployDir = project.file(ext.getBundlesDir() + "/" + metadata.folderName());
+                File deployDir = resolveBundleDir(project, ext.getBundlesDir(), metadata.folderName());
                 if (deployDir.exists()) {
                     project.delete(deployDir);
                     task.getLogger().lifecycle("Deleted old bundle at {}", deployDir);
                 }
             });
         });
+    }
+
+    private File resolveBundleDir(Project project, String bundlesDir, String folderName) {
+        File baseDir = new File(bundlesDir);
+        if (baseDir.isAbsolute()) {
+            return new File(baseDir, folderName);
+        }
+        return project.file(bundlesDir + "/" + folderName);
     }
 
     private void registerUtilityTasks(Project project) {
