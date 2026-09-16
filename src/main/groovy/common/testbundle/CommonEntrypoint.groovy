@@ -1,5 +1,7 @@
 package common.testbundle
 
+import com.azure.json.models.JsonBoolean
+import com.google.gson.JsonObject
 import de.luckymcdev.foundryengine.common.Common
 import de.luckymcdev.foundryengine.common.builder.block.BlockBuilder
 import de.luckymcdev.foundryengine.common.builder.item.ItemBuilder
@@ -10,6 +12,7 @@ import de.luckymcdev.foundryengine.common.builder.tag.TagBuilder
 import de.luckymcdev.foundryengine.common.event.BundleEvents
 import de.luckymcdev.foundryengine.common.event.PlayerEvents
 import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.common.util.JsonIO
 import net.minecraft.advancements.criterion.InventoryChangeTrigger
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
@@ -146,6 +149,10 @@ class CommonEntrypoint implements BundleEntrypoint {
 		Utils.hello("World")
 
 		Common.LOGGER.error("Test Load Server")
+
+		var test = Common.GAMEDIR.resolve("../test.json").toAbsolutePath()
+
+		JsonIO.write(new JsonObject(), test)
 
 		/*
 		PlayerEvents.tick {
