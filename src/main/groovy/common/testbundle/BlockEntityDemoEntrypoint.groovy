@@ -1,10 +1,10 @@
 package common.testbundle
 
 
-import de.luckymcdev.foundryengine.common.builder.block.BlockBuilder
-import de.luckymcdev.foundryengine.common.builder.blockentity.BlockEntityBuilder
-import de.luckymcdev.foundryengine.common.event.BundleEvents
-import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.core.common.builder.block.BlockBuilder
+import de.luckymcdev.foundryengine.core.common.builder.blockentity.BlockEntityBuilder
+import de.luckymcdev.foundryengine.core.common.event.BundleEvents
+import de.luckymcdev.foundryengine.core.common.script.BundleEntrypoint
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.world.InteractionResult

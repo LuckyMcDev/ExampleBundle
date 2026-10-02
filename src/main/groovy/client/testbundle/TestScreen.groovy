@@ -1,11 +1,11 @@
 package client.testbundle
 
 import com.mojang.logging.LogUtils
-import de.luckymcdev.foundryengine.client.Client
-import de.luckymcdev.foundryengine.client.ui.screen.EngineScreen
-import de.luckymcdev.foundryengine.client.ui.widget.ButtonWidget
-import de.luckymcdev.foundryengine.client.ui.widget.PanelWidget
-import de.luckymcdev.foundryengine.common.util.color.Color
+import de.luckymcdev.foundryengine.core.client.Client
+import de.luckymcdev.foundryengine.core.client.ui.screen.EngineScreen
+import de.luckymcdev.foundryengine.core.client.ui.widget.ButtonWidget
+import de.luckymcdev.foundryengine.core.client.ui.widget.PanelWidget
+import de.luckymcdev.foundryengine.core.common.util.color.Color
 import dev.vfyjxf.taffy.style.AlignContent
 import dev.vfyjxf.taffy.style.AlignItems
 import dev.vfyjxf.taffy.style.FlexDirection
