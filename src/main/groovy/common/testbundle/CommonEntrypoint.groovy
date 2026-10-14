@@ -2,17 +2,17 @@ package common.testbundle
 
 import com.azure.json.models.JsonBoolean
 import com.google.gson.JsonObject
-import de.luckymcdev.foundryengine.core.common.Common
-import de.luckymcdev.foundryengine.core.common.builder.block.BlockBuilder
-import de.luckymcdev.foundryengine.core.common.builder.item.ItemBuilder
-import de.luckymcdev.foundryengine.core.common.builder.menu.MenuBuilder
-import de.luckymcdev.foundryengine.core.common.builder.recipe.RecipeBuilder
-import de.luckymcdev.foundryengine.core.common.builder.sound.SoundBuilder
-import de.luckymcdev.foundryengine.core.common.builder.tag.TagBuilder
-import de.luckymcdev.foundryengine.core.common.event.BundleEvents
-import de.luckymcdev.foundryengine.core.common.event.PlayerEvents
-import de.luckymcdev.foundryengine.core.common.script.BundleEntrypoint
-import de.luckymcdev.foundryengine.core.common.util.JsonIO
+import de.luckymcdev.foundryengine.common.Common
+import de.luckymcdev.foundryengine.common.builder.block.BlockBuilder
+import de.luckymcdev.foundryengine.common.builder.item.ItemBuilder
+import de.luckymcdev.foundryengine.common.builder.menu.MenuBuilder
+import de.luckymcdev.foundryengine.common.builder.recipe.RecipeBuilder
+import de.luckymcdev.foundryengine.common.builder.sound.SoundBuilder
+import de.luckymcdev.foundryengine.common.builder.tag.TagBuilder
+import de.luckymcdev.foundryengine.common.event.BundleEvents
+import de.luckymcdev.foundryengine.common.event.PlayerEvents
+import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.common.util.JsonIO
 import net.minecraft.advancements.criterion.InventoryChangeTrigger
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
@@ -145,6 +145,8 @@ class CommonEntrypoint implements BundleEntrypoint {
 			it.sounds(MY_SOUND)
 			it.tags(MY_TAG)
 		}
+
+		System.getLogger("common-entrypoint-test").println("Common Entrypoint Test") // doesnt print, but also doesnt crash :D
 
 		Utils.hello("World")
 

@@ -1,11 +1,11 @@
 package client.testbundle
 
 import common.testbundle.BlockEntityDemoEntrypoint
-import de.luckymcdev.foundryengine.core.client.render.blockentity.EngineBlockEntityRenderers
-import de.luckymcdev.foundryengine.core.common.Common
-import de.luckymcdev.foundryengine.core.common.event.BundleEvents
-import de.luckymcdev.foundryengine.core.common.event.ClientEvents
-import de.luckymcdev.foundryengine.core.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.client.render.blockentity.EngineBlockEntityRenderers
+import de.luckymcdev.foundryengine.common.Common
+import de.luckymcdev.foundryengine.common.event.BundleEvents
+import de.luckymcdev.foundryengine.common.event.ClientEvents
+import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
 import net.minecraft.client.Minecraft
 
 class ClientEntrypoint implements BundleEntrypoint {

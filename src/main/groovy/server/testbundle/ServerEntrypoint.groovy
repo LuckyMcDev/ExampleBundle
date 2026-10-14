@@ -1,7 +1,7 @@
 package server.testbundle
 
-import de.luckymcdev.foundryengine.core.common.Common
-import de.luckymcdev.foundryengine.core.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.common.Common
+import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
 
 class ServerEntrypoint implements BundleEntrypoint {
 
