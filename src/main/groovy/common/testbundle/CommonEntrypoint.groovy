@@ -29,6 +29,8 @@ import net.minecraft.world.item.component.ItemLore
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 
+import java.nio.file.Files
+
 class CommonEntrypoint implements BundleEntrypoint {
 
 	public static final String BUNDLEID = "testbundle"
@@ -152,9 +154,11 @@ class CommonEntrypoint implements BundleEntrypoint {
 
 		Common.LOGGER.error("Test Load Server")
 
-		var test = Common.GAMEDIR.resolve("../test.json").toAbsolutePath()
+		var test = Common.GAMEDIR.resolve("test.json").toAbsolutePath()
 
 		JsonIO.write(new JsonObject(), test)
+
+		Files.copy(test, Common.GAMEDIR.resolve("test2.json5"))
 
 		/*
 		PlayerEvents.tick {
