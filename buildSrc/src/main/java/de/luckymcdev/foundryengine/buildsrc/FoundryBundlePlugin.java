@@ -9,19 +9,13 @@ import org.gradle.api.file.FileTree;
 import org.gradle.api.tasks.Copy;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 public class FoundryBundlePlugin implements Plugin<Project> {
-
-    public static final String GLOBAL_MODS_PATH_FILE =
-            System.getProperty("user.home") + "/.foundryengine/last-mods-path.properties";
 
     @Override
     public void apply(Project project) {
@@ -29,11 +23,16 @@ public class FoundryBundlePlugin implements Plugin<Project> {
         project.setVersion(metadata.version());
         project.getExtensions().add("foundryBundle", metadata);
 
-        project.getExtensions().create("foundryDeploy", FoundryDeployExtension.class);
+        FoundryDeployExtension deploy = project.getExtensions().create("foundryDeploy", FoundryDeployExtension.class);
 
-        registerDynamicModsDependency(project);
+        // Written by the IntelliJ plugin (FoundryEngine tool window).
+        FoundryLocalConfig local = FoundryLocalConfig.read(project);
+        if (local.bundlesDir() != null) {
+            deploy.setBundlesDir(local.bundlesDir());
+        }
+
+        registerModsDependency(project, local);
         registerBundleTasks(project, metadata);
-        registerUtilityTasks(project);
     }
 
     private BundleMetadata readBundleMetadata(Project project) {
@@ -89,31 +88,29 @@ public class FoundryBundlePlugin implements Plugin<Project> {
         return value;
     }
 
-    private void registerDynamicModsDependency(Project project) {
-        File globalModsFile = new File(GLOBAL_MODS_PATH_FILE);
-        if (!globalModsFile.exists()) {
+    private void registerModsDependency(Project project, FoundryLocalConfig local) {
+        if (local.modsPath() == null) {
             return;
         }
 
-        Properties props = new Properties();
-        try (InputStream in = new FileInputStream(globalModsFile)) {
-            props.load(in);
-        } catch (IOException e) {
-            project.getLogger().warn("Failed to read {}: {}", GLOBAL_MODS_PATH_FILE, e.getMessage());
+        File modsDir = new File(local.modsPath());
+        if (!modsDir.isDirectory()) {
+            project.getLogger().warn("Configured mods folder does not exist: {}", modsDir);
             return;
         }
 
-        String modsPath = props.getProperty("modsPath");
-        if (modsPath == null || modsPath.isBlank()) {
+        List<String> selected = local.modJars();
+        if (selected != null && selected.isEmpty()) {
             return;
         }
 
-        File modsDir = new File(modsPath);
-        if (!modsDir.exists() || !modsDir.isDirectory()) {
-            return;
-        }
-
-        FileTree modJars = project.fileTree(modsDir, tree -> tree.include("**/*.jar"));
+        FileTree modJars = project.fileTree(modsDir, tree -> {
+            if (selected == null) {
+                tree.include("**/*.jar");
+            } else {
+                selected.forEach(tree::include);
+            }
+        });
         project.getDependencies().add("implementation", modJars);
     }
 
@@ -135,42 +132,17 @@ public class FoundryBundlePlugin implements Plugin<Project> {
 
             task.into(project.provider(() -> {
                 FoundryDeployExtension ext = project.getExtensions().getByType(FoundryDeployExtension.class);
-                return resolveBundleDir(project, ext.getBundlesDir(), metadata.folderName());
+                return project.file(ext.getBundlesDir() + "/" + metadata.folderName());
             }));
 
             task.doFirst(t -> {
                 FoundryDeployExtension ext = project.getExtensions().getByType(FoundryDeployExtension.class);
-                File deployDir = resolveBundleDir(project, ext.getBundlesDir(), metadata.folderName());
+                File deployDir = project.file(ext.getBundlesDir() + "/" + metadata.folderName());
                 if (deployDir.exists()) {
                     project.delete(deployDir);
                     task.getLogger().lifecycle("Deleted old bundle at {}", deployDir);
                 }
             });
-        });
-    }
-
-    private File resolveBundleDir(Project project, String bundlesDir, String folderName) {
-        File baseDir = new File(bundlesDir);
-        if (baseDir.isAbsolute()) {
-            return new File(baseDir, folderName);
-        }
-        return project.file(bundlesDir + "/" + folderName);
-    }
-
-    private void registerUtilityTasks(Project project) {
-        project.getTasks().register("showModsPath", ShowModsPathTask.class, task -> {
-            task.setGroup("help");
-            task.setDescription("Shows the last recorded mods path");
-        });
-
-        project.getTasks().register("clearModsPath", ClearModsPathTask.class, task -> {
-            task.setGroup("development");
-            task.setDescription("Clears the recorded mods path");
-        });
-
-        project.getTasks().register("refreshDynamicMods", RefreshDynamicModsTask.class, task -> {
-            task.setGroup("development");
-            task.setDescription("Forces re-resolution of dynamic mod dependencies");
         });
     }
 }
