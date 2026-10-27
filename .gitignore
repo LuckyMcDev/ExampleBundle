@@ -46,3 +46,4 @@ dynamic-mods.properties
 *.tar.gz
 *.rar
 /.idea/
+/.foundryengine/instance.properties

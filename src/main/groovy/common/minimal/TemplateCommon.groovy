@@ -1,11 +1,12 @@
-package client.minimal
+package common.minimal
 
 import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
 
-class ExampleClient implements BundleEntrypoint {
+class TemplateCommon implements BundleEntrypoint {
 
     @Override
     void onLoad() {
+    
     }
 
     @Override

@@ -1,0 +1,8 @@
+[[bundles]]
+bundleId = "template"
+version = "0.0.3"
+displayName = "Foundry Engine Template"
+displayURL = "https://github.com/LuckyMcDev/FoundryEngine-Template"
+authors = "You"
+description = '''This is a Description'''
+dependencies = []
