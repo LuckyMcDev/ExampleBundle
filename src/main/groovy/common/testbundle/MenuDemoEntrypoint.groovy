@@ -1,12 +1,12 @@
 package common.testbundle
 
 import client.testbundle.ChestScreen
-import de.luckymcdev.foundryengine.common.builder.block.BlockBuilder
-import de.luckymcdev.foundryengine.common.builder.blockentity.BlockEntityBuilder
-import de.luckymcdev.foundryengine.common.builder.menu.EngineMenu
-import de.luckymcdev.foundryengine.common.builder.menu.MenuBuilder
-import de.luckymcdev.foundryengine.common.event.BundleEvents
-import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.builder.common.block.BlockBuilder
+import de.luckymcdev.foundryengine.builder.common.blockentity.BlockEntityBuilder
+import de.luckymcdev.foundryengine.builder.common.menu.EngineMenu
+import de.luckymcdev.foundryengine.builder.common.menu.MenuBuilder
+import de.luckymcdev.foundryengine.event.common.BundleEvents
+import de.luckymcdev.foundryengine.script.common.BundleEntrypoint
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.SimpleContainer

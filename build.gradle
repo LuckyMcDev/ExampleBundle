@@ -41,8 +41,10 @@ repositories {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
+def neoVersion = project(':26.1').property('deps.neo_loader')
+
 neoForge {
-	version = neo_version
+	version = neoVersion
 }
 
 dependencies {

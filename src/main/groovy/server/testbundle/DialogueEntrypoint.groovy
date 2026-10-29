@@ -1,10 +1,10 @@
 package server.testbundle
 
-import de.luckymcdev.foundryengine.common.Common
-import de.luckymcdev.foundryengine.common.dialogue.DialogueNode
-import de.luckymcdev.foundryengine.common.dialogue.DialogueOption
-import de.luckymcdev.foundryengine.common.dialogue.DialogueTree
-import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.Common
+import de.luckymcdev.foundryengine.dialogue.common.DialogueNode
+import de.luckymcdev.foundryengine.dialogue.common.DialogueOption
+import de.luckymcdev.foundryengine.dialogue.common.DialogueTree
+import de.luckymcdev.foundryengine.script.common.BundleEntrypoint
 import net.minecraft.resources.Identifier
 
 class DialogueEntrypoint implements BundleEntrypoint {

@@ -1,7 +1,7 @@
 package client.testbundle
 
-import de.luckymcdev.foundryengine.client.ui.screen.EngineContainerScreen
-import de.luckymcdev.foundryengine.common.builder.menu.EngineMenu
+import de.luckymcdev.foundryengine.builder.common.menu.EngineMenu
+import de.luckymcdev.foundryengine.ui.client.screen.EngineContainerScreen
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component

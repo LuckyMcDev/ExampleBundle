@@ -1,8 +1,8 @@
 package common.testbundle
 
-import de.luckymcdev.foundryengine.common.builder.sound.SoundBuilder
-import de.luckymcdev.foundryengine.common.event.BundleEvents
-import de.luckymcdev.foundryengine.common.script.BundleEntrypoint
+import de.luckymcdev.foundryengine.builder.common.sound.SoundBuilder
+import de.luckymcdev.foundryengine.event.common.BundleEvents
+import de.luckymcdev.foundryengine.script.common.BundleEntrypoint
 
 class SoundRegistryEntrypoint implements BundleEntrypoint {
 	static def TEST_FORMATS = ["flac", "mp3", "ogg"]
@@ -16,7 +16,9 @@ class SoundRegistryEntrypoint implements BundleEntrypoint {
 	@Override
 	void onLoad() {
 		BundleEvents.registry {
-			it.sounds(*TEST_SONGS)
+			TEST_SONGS.each {sb ->
+				it.sounds(sb)
+			}
 		}
 	}
 
